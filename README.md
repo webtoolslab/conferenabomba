@@ -1,9 +1,8 @@
-# Confere na Bomba - versão 2
+# Confere na Bomba v3
 
-Esta versão prioriza a simulação antes do abastecimento:
-- Por valor: informa preço por litro e valor desejado; mostra litros esperados e total.
-- Por litros: informa preço por litro e litros desejados; mostra total esperado.
-- Inclui orientação específica para tanque cheio.
-- Sem cadastro e sem coleta de dados.
+Atualização do site/PWA:
+- Três modalidades: por valor, por litros e tanque cheio.
+- Tanque cheio: informa preço anunciado por litro e valor final cobrado; calcula quantos litros devem aparecer na bomba.
+- Orientação de instalação contextual: iPhone Safari recebe instrução para Compartilhar > Adicionar à Tela de Início; navegadores Android compatíveis podem oferecer instalação.
 
-Substitua o `index.html` do repositório GitHub atual por este arquivo. Se estiver usando GitHub Pages, o deploy será atualizado após o commit. Os arquivos manifest, sw e icon podem ser adicionados/substituídos também.
+Substitua no repositório GitHub Pages os arquivos: index.html, manifest.webmanifest, sw.js, icon.svg, icon-192.png, icon-512.png e apple-touch-icon.png. Faça commit e aguarde a publicação.
