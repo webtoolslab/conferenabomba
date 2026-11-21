@@ -1,7 +1,6 @@
 {
   "name": "Confere na Bomba",
   "short_name": "Confere na Bomba",
-  "description": "Confira se o valor cobrado no abastecimento corresponde ao preço anunciado.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f6f8f5",

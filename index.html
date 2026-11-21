@@ -1,239 +1,60 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#246b43">
-  <meta name="description" content="Confira se o valor cobrado no abastecimento corresponde ao preço anunciado. Gratuito, simples e sem cadastro.">
-  <title>Confere na Bomba</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <style>
-    :root{--green:#246b43;--green2:#174b30;--mint:#eaf3ec;--ink:#183326;--muted:#64756a;--line:#dce7de;--bg:#f6f8f5;--white:#fff;--red:#b42318;--redbg:#fff0ee;--gold:#8a5b00;--goldbg:#fff7df}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.45}
-    button,input{font:inherit}
-    .wrap{width:min(100% - 28px,680px);margin:0 auto;padding:18px 0 42px}
-    header{display:flex;align-items:center;gap:12px;padding:8px 2px 20px}
-    .logo{width:48px;height:48px;border-radius:15px;background:var(--green);display:grid;place-items:center;color:white;flex:none}
-    .brand{font-weight:850;font-size:21px;letter-spacing:-.6px;line-height:1.05}
-    .tag{font-size:11px;color:var(--muted);margin-top:5px;letter-spacing:.5px;text-transform:uppercase;font-weight:700}
-    .hero{background:var(--green);color:#fff;border-radius:22px;padding:24px 22px;margin-bottom:16px;position:relative;overflow:hidden}
-    .hero:after{content:"";position:absolute;width:180px;height:180px;border:1px solid #ffffff26;border-radius:50%;right:-65px;top:-70px;box-shadow:0 0 0 22px #ffffff0c,0 0 0 45px #ffffff09}
-    .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.1px;font-weight:800;color:#d8eadc}
-    h1{font-size:clamp(26px,7vw,34px);line-height:1.08;letter-spacing:-1px;margin:8px 0}
-    .hero p{color:#e4efe6;margin:0;max-width:430px;font-size:14px}
-    .card{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:19px;margin:14px 0;box-shadow:0 3px 12px #173b2510}
-    h2{font-size:18px;letter-spacing:-.3px;margin:0 0 14px}
-    .segmented{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;background:#f0f4f0;padding:5px;border-radius:13px;margin-bottom:18px}
-    .segmented button{border:0;background:transparent;border-radius:10px;padding:10px 5px;color:#52645a;font-size:12px;font-weight:750;cursor:pointer}
-    .segmented button[aria-pressed="true"]{background:#fff;color:var(--green);box-shadow:0 1px 5px #142b1c18}
-    .field{margin:13px 0}
-    label{display:block;font-size:13px;font-weight:750;margin-bottom:7px}
-    .hint{font-size:11px;color:var(--muted);font-weight:450;margin-top:4px}
-    .input-wrap{position:relative}
-    .prefix{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;color:#728077;font-weight:650}
-    input{width:100%;border:1px solid #ccd9ce;border-radius:12px;background:#fff;padding:13px 13px 13px 43px;color:var(--ink);font-size:17px;font-weight:650;outline:none}
-    input:focus{border-color:var(--green);box-shadow:0 0 0 3px #246b4318}
-    input::placeholder{color:#a0aca3;font-weight:450}
-    .plain input{padding-left:13px}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .primary{width:100%;border:0;border-radius:13px;padding:15px;background:var(--green);color:white;font-weight:800;font-size:15px;cursor:pointer;margin-top:8px}
-    .primary:active{transform:scale(.99)}
-    .secondary{border:1px solid var(--line);background:#fff;color:var(--green);font-weight:750;border-radius:12px;padding:12px 14px;cursor:pointer}
-    .result{display:none;margin-top:16px;border-radius:16px;padding:17px;background:var(--mint);border:1px solid #cfe1d2}
-    .result.show{display:block}
-    .result.alert{background:var(--redbg);border-color:#f1c8c3}
-    .result.ok{background:#edf7ef;border-color:#cce5d1}
-    .result.neutral{background:var(--goldbg);border-color:#f0dfaa}
-    .result-label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:850;color:#53685a}
-    .big{font-size:30px;font-weight:850;letter-spacing:-1px;margin:2px 0 8px}
-    .result.alert .big,.result.alert .result-title{color:var(--red)}
-    .result.ok .big,.result.ok .result-title{color:var(--green)}
-    .result-title{font-weight:850;font-size:17px;margin:2px 0 5px}
-    .rows{border-top:1px solid #8ba99545;margin-top:12px;padding-top:9px}
-    .rowline{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:5px 0}
-    .rowline span:first-child{color:#586a5e}
-    .rowline strong{text-align:right}
-    .fine{font-size:11px;color:var(--muted);margin:11px 0 0}
-    .share{display:flex;gap:8px;margin-top:13px}
-    .share button{flex:1}
-    .step{display:flex;gap:12px;margin:13px 0;align-items:flex-start}
-    .num{width:27px;height:27px;border-radius:50%;background:var(--mint);color:var(--green);display:grid;place-items:center;font-size:12px;font-weight:850;flex:none}
-    .step strong{font-size:13px;display:block}
-    .step p{font-size:12px;color:var(--muted);margin:3px 0 0}
-    .notice{font-size:12px;color:#52645a;background:#f1f5f1;padding:12px;border-radius:12px;margin-top:14px}
-    footer{text-align:center;color:#78867c;font-size:11px;padding:20px 10px}
-    footer strong{color:var(--green)}
-    .error{display:none;color:var(--red);font-size:12px;margin-top:10px;font-weight:650}
-    @media(max-width:390px){.wrap{width:min(100% - 20px,680px)}.card{padding:16px}.segmented button{font-size:11px}.grid2{gap:7px}}
-  </style>
-</head>
-<body>
-<div class="wrap">
-  <header>
-    <div class="logo" aria-hidden="true">
-      <svg width="29" height="29" viewBox="0 0 24 24" fill="none"><path d="M5 21V4.8C5 3.8 5.8 3 6.8 3h7.4c1 0 1.8.8 1.8 1.8V21M4 21h12M8 7h6v5H8zM16 8h2l2 2v7a2 2 0 0 1-4 0v-4" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.5 15.5h2" stroke="white" stroke-width="1.7" stroke-linecap="round"/></svg>
-    </div>
-    <div><div class="brand">Confere na Bomba</div><div class="tag">Seu abastecimento, sua conferência</div></div>
-  </header>
-
-  <section class="hero">
-    <div class="eyebrow">Ferramenta gratuita</div>
-    <h1>Abasteceu?<br>Confira a conta.</h1>
-    <p>Compare o preço anunciado com o valor cobrado e veja quanto deveria pagar.</p>
-  </section>
-
-  <main class="card">
-    <h2>Confira seu abastecimento</h2>
-    <div class="segmented" role="group" aria-label="Tipo de abastecimento">
-      <button type="button" data-mode="litros" aria-pressed="true">Por litros</button>
-      <button type="button" data-mode="valor" aria-pressed="false">Por valor</button>
-      <button type="button" data-mode="tanque" aria-pressed="false">Tanque cheio</button>
-    </div>
-
-    <div class="field">
-      <label for="price">Preço anunciado por litro</label>
-      <div class="input-wrap"><span class="prefix">R$</span><input id="price" inputmode="decimal" placeholder="5,79" autocomplete="off"></div>
-      <div class="hint">Informe o preço válido para a forma de pagamento que você usou.</div>
-    </div>
-
-    <div id="litersField" class="field">
-      <label for="liters" id="litersLabel">Quantidade abastecida (litros)</label>
-      <div class="input-wrap"><input id="liters" inputmode="decimal" placeholder="Ex.: 30" autocomplete="off"></div>
-      <div class="hint" id="litersHint">Confira os litros registrados no visor da bomba.</div>
-    </div>
-
-    <div id="amountField" class="field" style="display:none">
-      <label for="amount">Valor que você pediu para abastecer</label>
-      <div class="input-wrap"><span class="prefix">R$</span><input id="amount" inputmode="decimal" placeholder="100,00" autocomplete="off"></div>
-      <div class="hint">Nesse caso, também confira quantos litros entraram no tanque.</div>
-    </div>
-
-    <div class="field">
-      <label for="charged">Valor efetivamente cobrado</label>
-      <div class="input-wrap"><span class="prefix">R$</span><input id="charged" inputmode="decimal" placeholder="Ex.: 180,00" autocomplete="off"></div>
-      <div class="hint">Use o valor final da bomba ou do comprovante de pagamento.</div>
-    </div>
-
-    <div id="error" class="error" role="alert">Confira os campos. Informe valores numéricos maiores que zero.</div>
-    <button class="primary" id="calculate">Conferir agora</button>
-
-    <section id="result" class="result" aria-live="polite">
-      <div class="result-label" id="resultLabel">Resultado da conferência</div>
-      <div class="result-title" id="resultTitle"></div>
-      <div class="big" id="difference"></div>
-      <div id="resultText" style="font-size:13px"></div>
-      <div class="rows" id="resultRows"></div>
-      <p class="fine" id="caveat"></p>
-      <div class="share">
-        <button class="secondary" id="share">Compartilhar</button>
-        <button class="secondary" id="again">Nova conta</button>
-      </div>
-    </section>
-  </main>
-
-  <section class="card">
-    <h2>Como conferir na bomba</h2>
-    <div class="step"><div class="num">1</div><div><strong>Confira o preço por litro</strong><p>Veja se o valor no visor corresponde ao preço anunciado para a forma de pagamento escolhida.</p></div></div>
-    <div class="step"><div class="num">2</div><div><strong>Confira a quantidade de litros</strong><p>Observe o volume registrado na bomba, especialmente quando pedir para encher o tanque.</p></div></div>
-    <div class="step"><div class="num">3</div><div><strong>Confira o valor total</strong><p>Compare o total indicado na bomba com o valor cobrado no pagamento.</p></div></div>
-    <div class="notice"><strong>Importante:</strong> faça a conferência antes de concluir o pagamento. Se encontrar diferença, peça esclarecimento ao estabelecimento e guarde o comprovante. A calculadora ajuda na comparação, mas não comprova sozinha uma irregularidade.</div>
-  </section>
-
-  <footer><strong>Confere na Bomba</strong><br>Informação simples para uma compra consciente.<br>Ferramenta gratuita e independente.</footer>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#246b43"><meta name="description" content="Simule seu abastecimento e saiba o que deve aparecer na bomba. Gratuito e sem cadastro.">
+<title>Confere na Bomba</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg">
+<style>
+:root{--g:#246b43;--gd:#174b30;--mint:#eaf3ec;--ink:#183326;--muted:#64756a;--line:#dce7de;--bg:#f6f8f5;--red:#b42318;--redbg:#fff0ee}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.45}
+.wrap{width:min(100% - 26px,650px);margin:auto;padding:16px 0 38px}header{display:flex;align-items:center;gap:11px;padding:6px 2px 18px}
+.logo{width:46px;height:46px;border-radius:14px;background:var(--g);display:grid;place-items:center;color:white}.brand{font-weight:850;font-size:21px;letter-spacing:-.6px}.tag{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:750}
+.hero{background:var(--g);color:#fff;border-radius:21px;padding:23px 21px;margin-bottom:15px}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:850;color:#d8eadc}h1{font-size:clamp(27px,7vw,35px);line-height:1.08;letter-spacing:-1px;margin:7px 0}.hero p{margin:0;color:#e4efe6;font-size:14px;max-width:450px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 3px 12px #173b250b}h2{font-size:18px;margin:0 0 6px;letter-spacing:-.3px}.sub{font-size:12px;color:var(--muted);margin:0 0 15px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f0f4f0;padding:5px;border-radius:13px;margin:13px 0 17px}.tabs button{border:0;background:transparent;border-radius:10px;padding:11px 6px;color:#52645a;font-size:12px;font-weight:800;cursor:pointer}.tabs button[aria-pressed=true]{background:#fff;color:var(--g);box-shadow:0 1px 5px #142b1c18}
+.field{margin:13px 0}label{display:block;font-size:13px;font-weight:750;margin-bottom:7px}.inputwrap{position:relative}.prefix{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;color:#728077;font-weight:650}input{width:100%;border:1px solid #ccd9ce;border-radius:12px;background:#fff;padding:13px 13px 13px 43px;color:var(--ink);font-size:18px;font-weight:700;outline:none}input:focus{border-color:var(--g);box-shadow:0 0 0 3px #246b4318}input::placeholder{color:#a0aca3;font-weight:450}.hint{font-size:11px;color:var(--muted);margin-top:4px}
+.primary{width:100%;border:0;border-radius:13px;padding:15px;background:var(--g);color:#fff;font-weight:850;font-size:15px;cursor:pointer;margin-top:8px}.result{display:none;margin-top:16px;border-radius:16px;padding:17px;background:var(--mint);border:1px solid #cfe1d2}.result.show{display:block}.result-label{text-align:center;color:#42634c;font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:850}.hero-number{text-align:center;color:var(--gd);font-size:clamp(34px,9vw,44px);font-weight:900;letter-spacing:-1.5px;line-height:1.15;margin:5px 0}.hero-caption{text-align:center;color:#42634c;font-size:12px;font-weight:700}.total{text-align:center;font-size:24px;font-weight:850;color:var(--gd);margin-top:8px}.result-note{font-size:12px;color:#526a59;text-align:center;margin:9px 0 0}.line{height:1px;background:#9dbba455;margin:13px 0}.rowline{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:5px 0}.rowline span{color:#586a5e}.rowline strong{text-align:right}.fine{font-size:11px;color:var(--muted);margin:12px 0 0}.secondary{width:100%;border:1px solid #cbdacc;background:#fff;color:var(--g);font-weight:800;border-radius:12px;padding:12px;margin-top:11px;cursor:pointer}
+.error{display:none;color:var(--red);font-size:12px;margin:9px 0;font-weight:700}.step{display:flex;gap:11px;margin:13px 0}.num{width:26px;height:26px;border-radius:50%;background:var(--mint);color:var(--g);display:grid;place-items:center;font-size:12px;font-weight:850;flex:none}.step strong{font-size:13px}.step p{font-size:12px;color:var(--muted);margin:3px 0 0}.notice{font-size:12px;color:#52645a;background:#f1f5f1;padding:12px;border-radius:12px;margin-top:14px}footer{text-align:center;color:#78867c;font-size:11px;padding:20px 10px}footer strong{color:var(--g)}
+@media(max-width:390px){.wrap{width:calc(100% - 20px)}.card{padding:15px}}
+</style></head>
+<body><div class="wrap">
+<header><div class="logo"><svg width="29" height="29" viewBox="0 0 24 24" fill="none"><path d="M5 21V4.8C5 3.8 5.8 3 6.8 3h7.4c1 0 1.8.8 1.8 1.8V21M4 21h12M8 7h6v5H8zM16 8h2l2 2v7a2 2 0 0 1-4 0v-4" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="brand">Confere na Bomba</div><div class="tag">Seu abastecimento, sua conferência</div></div></header>
+<section class="hero"><div class="eyebrow">Ferramenta gratuita</div><h1>Saiba o que deve aparecer na bomba.</h1><p>Faça a simulação antes de abastecer e confira os números no visor antes de pagar.</p></section>
+<main class="card">
+<h2>Simule seu abastecimento</h2><p class="sub">Informe o preço anunciado e o que você pretende abastecer.</p>
+<div class="tabs" role="group" aria-label="Como pretende abastecer"><button type="button" data-mode="valor" aria-pressed="true">Vou colocar um valor</button><button type="button" data-mode="litros" aria-pressed="false">Vou colocar litros</button></div>
+<div class="field"><label for="price">Preço anunciado por litro</label><div class="inputwrap"><span class="prefix">R$</span><input id="price" inputmode="decimal" placeholder="3,49"></div><div class="hint">Use o preço válido para a forma de pagamento que você vai utilizar.</div></div>
+<div class="field" id="amountBox"><label for="amount">Quanto você vai pedir?</label><div class="inputwrap"><span class="prefix">R$</span><input id="amount" inputmode="decimal" placeholder="50,00"></div></div>
+<div class="field" id="litersBox" style="display:none"><label for="liters">Quantos litros você vai pedir?</label><div class="inputwrap"><input id="liters" inputmode="decimal" placeholder="20"></div></div>
+<div id="error" class="error" role="alert">Preencha os campos com valores numéricos maiores que zero.</div>
+<button class="primary" id="simulate">Simular abastecimento</button>
+<section class="result" id="result" aria-live="polite">
+<div class="result-label">Confira estes números no visor da bomba</div><div class="hero-number" id="expectedLiters">14,327 L</div><div class="hero-caption">QUANTIDADE DE LITROS ESPERADA</div><div class="total" id="expectedTotal">R$ 50,00</div><div class="hero-caption">VALOR TOTAL ESPERADO</div>
+<div class="line"></div><div id="rows"></div><p class="result-note" id="note"></p><button class="secondary" id="share">Compartilhar simulação</button>
+</section></main>
+<section class="card"><h2>E se eu for encher o tanque?</h2><p class="sub">Quando você pede para completar o tanque, não sabe antecipadamente quantos litros vão entrar. Nesse caso, confira a quantidade final registrada na bomba e multiplique pelo preço anunciado.</p><div class="notice"><strong>Exemplo:</strong> se a bomba registrar 32,5 litros e o preço anunciado for R$ 3,49, o total esperado será R$ 113,43. Confira se o visor mostra esse total, considerando o arredondamento dos centavos.</div></section>
+<section class="card"><h2>O que conferir antes de pagar</h2>
+<div class="step"><div class="num">1</div><div><strong>Preço por litro</strong><p>Veja se o preço no visor é o mesmo anunciado para a forma de pagamento escolhida.</p></div></div>
+<div class="step"><div class="num">2</div><div><strong>Quantidade de litros</strong><p>Compare os litros que aparecem na bomba com a simulação. Em abastecimento por valor, é o principal número para conferir.</p></div></div>
+<div class="step"><div class="num">3</div><div><strong>Valor total</strong><p>Confira o total no visor e depois o valor cobrado no pagamento.</p></div></div>
+<div class="notice">A simulação é uma referência matemática. Pequenas diferenças podem ocorrer por arredondamento do visor. Confirme também as condições do desconto anunciado.</div></section>
+<footer><strong>Confere na Bomba</strong><br>Informação simples para uma compra consciente.<br>Gratuito, independente e sem cadastro.</footer>
 </div>
 <script>
-(() => {
-  const $ = id => document.getElementById(id);
-  let mode = 'litros';
-  let lastResult = '';
-  const parse = value => {
-    if (typeof value !== 'string') return NaN;
-    let s = value.trim().replace(/\s/g,'').replace(/^R\$/i,'');
-    if (!s) return NaN;
-    if (s.includes(',') && s.includes('.')) s = s.replace(/\./g,'').replace(',','.');
-    else s = s.replace(',','.');
-    return Number(s);
-  };
-  const brl = n => n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-  const num = n => n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:3});
-  document.querySelectorAll('[data-mode]').forEach(btn => btn.addEventListener('click', () => {
-    mode = btn.dataset.mode;
-    document.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b===btn)));
-    $('amountField').style.display = mode === 'valor' ? 'block' : 'none';
-    $('litersField').style.display = 'block';
-    $('litersLabel').textContent = mode === 'tanque' ? 'Quantidade abastecida (litros)' : 'Quantidade abastecida (litros)';
-    $('liters').placeholder = mode === 'valor' ? 'Ex.: 17,27' : 'Ex.: 30';
-    $('litersHint').textContent = mode === 'valor'
-      ? 'Informe quantos litros a bomba registrou. Isso permite conferir o preço efetivo por litro.'
-      : 'Confira os litros registrados no visor da bomba.';
-    $('result').classList.remove('show');
-    $('error').style.display='none';
-  }));
-  $('calculate').addEventListener('click', () => {
-    const price = parse($('price').value);
-    const liters = parse($('liters').value);
-    const charged = parse($('charged').value);
-    const amount = parse($('amount').value);
-    const valid = Number.isFinite(price) && price>0 && Number.isFinite(charged) && charged>0 &&
-      Number.isFinite(liters) && liters>0 && (mode !== 'valor' || (Number.isFinite(amount) && amount>0));
-    if (!valid) { $('error').style.display='block'; $('result').classList.remove('show'); return; }
-    $('error').style.display='none';
-
-    let expected, delta, effective, title, text, caveat;
-    const unitExpected = price * liters;
-    effective = charged / liters;
-    if (mode === 'valor') {
-      const expectedLiters = amount / price;
-      const expectedAtAdvertisedPrice = price * liters;
-      delta = charged - expectedAtAdvertisedPrice;
-      const priceGap = effective - price;
-      title = priceGap > 0.009 ? 'Atenção: o preço efetivo ficou acima do anunciado.' : priceGap < -0.009 ? 'O preço efetivo ficou abaixo do anunciado.' : 'O preço efetivo por litro confere.';
-      text = `Com ${brl(amount)} no preço anunciado de ${brl(price)} por litro, você deveria receber aproximadamente ${num(expectedLiters)} litros. A bomba registrou ${num(liters)} litros.`;
-      caveat = `Pelo volume informado, o total ao preço anunciado seria ${brl(expectedAtAdvertisedPrice)}. O valor efetivamente cobrado foi ${brl(charged)}. Confira se o preço anunciado valia para a forma de pagamento utilizada e compare os números diretamente no visor da bomba.`;
-      expected = expectedAtAdvertisedPrice;
-      lastResult = `Confere na Bomba\nPreço anunciado: ${brl(price)}/litro\nValor solicitado: ${brl(amount)}\nLitros esperados: ${num(expectedLiters)}\nLitros registrados: ${num(liters)}\nValor cobrado: ${brl(charged)}\nPreço efetivo: ${brl(effective)}/litro\nDiferença estimada frente ao preço anunciado: ${brl(delta)}`;
-    } else {
-      expected = unitExpected;
-      delta = charged - expected;
-      title = Math.abs(delta)<0.01 ? 'Os valores conferem.' : delta>0 ? 'Atenção: o valor cobrado ficou acima do esperado.' : 'O valor cobrado ficou abaixo do esperado.';
-      text = `Para ${num(liters)} litros ao preço anunciado de ${brl(price)} por litro, o total esperado é ${brl(expected)}.`;
-      caveat = `Preço efetivo calculado: ${brl(effective)} por litro. Considere eventuais condições do desconto, arredondamentos e diferenças entre o visor da bomba e o comprovante.`;
-      lastResult = `Confere na Bomba\nPreço anunciado: ${brl(price)}/litro\nLitros abastecidos: ${num(liters)}\nTotal esperado: ${brl(expected)}\nValor cobrado: ${brl(charged)}\nPreço efetivo: ${brl(effective)}/litro\nDiferença: ${brl(delta)}`;
-    }
-    const result = $('result');
-    const discrepancy = mode === 'valor' ? (effective - price) : delta;
-    result.className = 'result show ' + (Math.abs(discrepancy)<0.01?'ok':discrepancy>0?'alert':'neutral');
-    $('resultTitle').textContent = title;
-    $('difference').textContent = (discrepancy>0?'+':discrepancy<0?'-':'') + (mode === 'valor' ? brl(Math.abs(discrepancy)) + '/L' : brl(Math.abs(discrepancy)));
-    $('resultText').textContent = text;
-    $('caveat').textContent = caveat;
-    $('resultRows').innerHTML = `
-      <div class="rowline"><span>Preço anunciado</span><strong>${brl(price)}/L</strong></div>
-      <div class="rowline"><span>Preço efetivo</span><strong>${brl(effective)}/L</strong></div>
-      <div class="rowline"><span>Valor cobrado</span><strong>${brl(charged)}</strong></div>
-      ${mode==='valor'?`<div class="rowline"><span>Valor solicitado</span><strong>${brl(amount)}</strong></div><div class="rowline"><span>Litros esperados</span><strong>${num(amount/price)} L</strong></div><div class="rowline"><span>Diferença estimada no total</span><strong>${brl(delta)}</strong></div>`:`<div class="rowline"><span>Total esperado</span><strong>${brl(expected)}</strong></div>`}
-    `;
-    result.scrollIntoView({behavior:'smooth',block:'nearest'});
-  });
-  $('share').addEventListener('click', async () => {
-    if (!lastResult) return;
-    if (navigator.share) {
-      try { await navigator.share({title:'Confere na Bomba',text:lastResult}); } catch(e) {}
-    } else {
-      try { await navigator.clipboard.writeText(lastResult); $('share').textContent='Copiado!'; setTimeout(()=>$('share').textContent='Compartilhar',1800); }
-      catch(e) { window.prompt('Copie sua conferência:',lastResult); }
-    }
-  });
-  $('again').addEventListener('click', () => {
-    $('price').value=''; $('liters').value=''; $('amount').value=''; $('charged').value='';
-    $('result').classList.remove('show'); $('price').focus();
-  });
-  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-  }
+(()=>{const $=id=>document.getElementById(id);let mode='valor',shareText='';
+const parse=v=>{let s=String(v||'').trim().replace(/\s/g,'').replace(/^R\$/i,'');if(!s)return NaN;if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');return Number(s)};
+const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const litersFmt=n=>n.toLocaleString('pt-BR',{minimumFractionDigits:3,maximumFractionDigits:3});
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));$('amountBox').style.display=mode==='valor'?'block':'none';$('litersBox').style.display=mode==='litros'?'block':'none';$('result').classList.remove('show');$('error').style.display='none'}));
+$('simulate').addEventListener('click',()=>{const price=parse($('price').value),amount=parse($('amount').value),liters=parse($('liters').value);const valid=Number.isFinite(price)&&price>0&&(mode==='valor'?Number.isFinite(amount)&&amount>0:Number.isFinite(liters)&&liters>0);if(!valid){$('error').style.display='block';$('result').classList.remove('show');return}$('error').style.display='none';
+const expectedL=mode==='valor'?amount/price:liters;const expectedR=mode==='valor'?amount:price*liters;
+$('expectedLiters').textContent=litersFmt(expectedL)+' L';$('expectedTotal').textContent=brl(expectedR);
+$('rows').innerHTML=`<div class="rowline"><span>Preço anunciado</span><strong>${brl(price)} por litro</strong></div><div class="rowline"><span>${mode==='valor'?'Valor solicitado':'Quantidade solicitada'}</span><strong>${mode==='valor'?brl(amount):litersFmt(liters)+' L'}</strong></div><div class="rowline"><span>Quantidade esperada</span><strong>${litersFmt(expectedL)} L</strong></div><div class="rowline"><span>Total esperado</span><strong>${brl(expectedR)}</strong></div>`;
+$('note').textContent=mode==='valor'?'Ao pedir um valor fechado, confira principalmente se a quantidade de litros corresponde a esta simulação. O visor pode mostrar três casas decimais.':'Ao pedir uma quantidade de litros, confira se o total da bomba corresponde ao valor calculado.';
+shareText=`Confere na Bomba\\nPreço anunciado: ${brl(price)}/litro\\n${mode==='valor'?'Valor solicitado: '+brl(amount):'Litros solicitados: '+litersFmt(liters)+' L'}\\nLitros esperados: ${litersFmt(expectedL)} L\\nTotal esperado: ${brl(expectedR)}\\nConfira esses números no visor antes de pagar.`;
+$('result').classList.add('show');$('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+$('share').addEventListener('click',async()=>{if(!shareText)return;if(navigator.share){try{await navigator.share({title:'Confere na Bomba',text:shareText})}catch(e){}}else{try{await navigator.clipboard.writeText(shareText);$('share').textContent='Copiado!';setTimeout(()=>$('share').textContent='Compartilhar simulação',1700)}catch(e){prompt('Copie sua simulação:',shareText)}}});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
-</script>
-</body>
-</html>
+</script></body></html>
